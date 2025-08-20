@@ -1,7 +1,9 @@
-self: {
+{
   config,
   lib,
   pkgs,
+  self,
+  elephant,
   ...
 }: let
   inherit (lib.modules) mkIf mkDefault mkMerge;
@@ -37,6 +39,10 @@ self: {
 
   cfg = config.programs.walker;
 in {
+  imports = [
+    elephant.homeManagerModules.default
+  ];
+
   options = {
     programs.walker = {
       enable = mkEnableOption "walker";
@@ -72,6 +78,8 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     {
+      programs.elephant.enable = true;
+
       home.packages = [cfg.package];
 
       xdg.configFile."walker/config.toml".source = mkIf (cfg.config != {}) (tomlFormat.generate "walker-config.toml" cfg.config);
@@ -96,4 +104,3 @@ in {
     })
   ]);
 }
-

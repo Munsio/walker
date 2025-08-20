@@ -6,12 +6,15 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     systems.url = "github:nix-systems/default-linux";
+
+    elephant.url = "github:abenz1267/elephant";
   };
 
   outputs = {
     self,
     nixpkgs,
     systems,
+    elephant,
     ...
   }: let
     inherit (nixpkgs) lib;
@@ -35,12 +38,12 @@
 
     homeManagerModules = {
       default = self.homeManagerModules.walker;
-      walker = import ./nix/modules/home-manager.nix self;
+      walker = import ./nix/modules/home-manager.nix;
     };
 
     nixosModules = {
       default = self.nixosModules.walker;
-      walker = import ./nix/modules/nixos.nix self;
+      walker = import ./nix/modules/nixos.nix;
     };
 
     nixConfig = {
@@ -49,3 +52,4 @@
     };
   };
 }
+
